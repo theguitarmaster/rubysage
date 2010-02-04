@@ -2,3 +2,12 @@ Say hello to Ruby Sage. A twitter bot written in ruby.
 
 This project was started by Stephen, Hamish and Anthony in an attempt to learn 
 more about Ruby, Twitter and Git.
+
+== Gem Dependencies
+
+* Twitter
+* Chronic
+
+== Usage
+
+Set up login details within account.yml (see example file!). Then run sage.rb.
