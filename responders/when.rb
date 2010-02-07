@@ -1,6 +1,6 @@
 require 'chronic'
 
-Plugin.define("when is ([a-zA-Z0-9 ]*)\?") do
+Responder.define("when is ([a-zA-Z0-9 ]*)\?") do
   name    "When is?"
   version "1.0.0"
   details "Find out when something is."
