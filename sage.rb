@@ -6,12 +6,12 @@
 # 
 # == Details 
 #   When run in the normal manner it will connect to twitter and collect
-#   recent tweets sent to the account detailed within ./account.yml. It will
-#   then process these tweets using the currently available plugins.
+#   recent tweets sent to the account detailed within account.yml. It will
+#   then process these tweets using the currently available responders.
 #
-#   Plugins sit within the 'plugins' directory and provide specific bits
+#   Responders sit within the 'responders' directory and provide specific bits
 #   of functionality for the bot. Theses are effectively the commands that
-#   the bot can respond to.
+#   the bot can respond to. They are implemented as plugins.
 #
 #   To use the bot for real you must create an 'account.yml' file containing
 #   your twitter username and password. OAuth support will come in time.
@@ -47,7 +47,7 @@ require 'twitter'
 require 'optparse' 
 require 'rdoc/usage'
 require 'ostruct'
-require 'plugin.rb'
+require 'lib/responder.rb'
 
 class Sage
   VERSION = '0.0.2'
@@ -62,7 +62,7 @@ class Sage
     @options.verbose = false
     @options.testing = false
     
-    load_plugins  
+    load_responders  
   end
   
   def run
@@ -74,9 +74,9 @@ class Sage
   
 protected
   
-  def load_plugins
-    puts "Lodaing plugins from ./plugins directory" if @options.verbose
-    Dir["plugins/*.rb"].each{ |x| load x }
+  def load_responders
+    puts "Lodaing responders from ./responders directory" if @options.verbose
+    Dir["responders/*.rb"].each{ |x| load x }
   end
   
   def parsed_options?
@@ -106,7 +106,7 @@ protected
       LocalClient.new
     else
       puts "Attempting to login to twitter and create a client" if @options.verbose
-      account  = YAML::load(File.open('account.yml')) 
+      account  = YAML::load(File.open('config/account.yml')) 
       httpauth = Twitter::HTTPAuth.new(account['username'], account['password'])
       Twitter::Base.new(httpauth)
     end
@@ -117,12 +117,12 @@ protected
     # For each mention see if any plugins can respond to it.
     # This nested loop is as ugly as hell and could be done better!
     client.mentions.each do |tweet|
-      Plugin.registered_plugins.each do |pattern, plugin|
+      Responder.registered_responders.each do |pattern, responder|
         regexp = Regexp.new(pattern, Regexp::IGNORECASE)
         matches = tweet.text.scan(regexp)
-        puts " #{plugin.name} ==> #{tweet.text} ==> #{matches.inspect}" if @options.verbose
+        puts " #{responder.name} ==> #{tweet.text} ==> #{matches.inspect}" if @options.verbose
         unless matches.empty?
-          client.update plugin.run(tweet, matches)
+          client.update responder.run(tweet, matches)
         end
       end
     end
@@ -139,7 +139,7 @@ class LocalClient
   end
   
   def mentions
-    mash_yaml('mentions.yml')
+    mash_yaml('config/mentions.yml')
   end
   
 protected

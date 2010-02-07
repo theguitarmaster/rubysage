@@ -20,6 +20,9 @@ For usage details see the help within sage.rb or run "sage.rb -h"
 
 Run "rdoc sage.rb" to create HTML documentation within a doc folder.
 
+At the very least you will need to enter your twitter login details into
+config/account.yml.
+
 == Local testing
 
 If you are just having a play or developing a plugin then run in local test
@@ -29,7 +32,3 @@ you can see what is going on with "sage.rb -t -V".
 When you are in test mode YAML files are used in place of the Twitter API.
 
 Enjoy!
-    
-
-    
-    
