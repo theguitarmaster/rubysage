@@ -1,0 +1,15 @@
+# Example mentions file for performing local testing.
+# Copy this as 'mentions.yml' and amend to suit your needs.
+# @local is taken as being the bot's username when running in test mode.
+
+mention1:
+  from_user: billy
+  text: @local what is the time?
+  
+mention2:
+  from_user: eric
+  text: @local when is next tuesday?
+  
+mention3:
+  from_user: sheila
+  text: @local what is stupid?

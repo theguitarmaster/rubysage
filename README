@@ -1,13 +1,35 @@
 Say hello to Ruby Sage. A twitter bot written in ruby.
 
+The bot can currently only respond to trivially simply questions but plans are
+afoot for more sophisticate behaviour.
+
 This project was started by Stephen, Hamish and Anthony in an attempt to learn 
-more about Ruby, Twitter and Git.
+more about Ruby, Twitter and Git. And to have some geeky fun.
 
 == Gem Dependencies
 
-* Twitter
-* Chronic
+* twitter
+* chronic
+* hashie
+* yaml
+* rdoc
 
 == Usage
 
-Set up login details within account.yml (see example file!). Then run sage.rb.
+For usage details see the help within sage.rb or run "sage.rb -h"
+
+Run "rdoc sage.rb" to create HTML documentation within a doc folder.
+
+== Local testing
+
+If you are just having a play or developing a plugin then run in local test
+mode by doing "sage.rb -t". You might also want to run in verbose mode so
+you can see what is going on with "sage.rb -t -V".
+
+When you are in test mode YAML files are used in place of the Twitter API.
+
+Enjoy!
+    
+
+    
+    
