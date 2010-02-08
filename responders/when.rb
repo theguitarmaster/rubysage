@@ -7,6 +7,6 @@ Responder.define("when is ([a-zA-Z0-9 ]*)\?") do
   usage   "When is xxx?"
   
   def run(tweet, matches)
-    "@#{tweet.from_user} #{matches.first} is #{Chronic.parse(matches.first)}."
+    "@#{tweet.user.screen_name} #{matches.first} is #{Chronic.parse(matches.first)}."
   end
 end
