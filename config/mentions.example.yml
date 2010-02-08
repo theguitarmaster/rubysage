@@ -3,13 +3,22 @@
 # @local is taken as being the bot's username when running in test mode.
 
 mention1:
-  from_user: billy
   text: @local what is the time?
-  
+  user:
+    id: 1
+    name: Eric
+    screen_name: eric
+    
 mention2:
-  from_user: eric
   text: @local when is next tuesday?
+  user:
+    id: 2
+    name: Billy
+    screen_name: billy
   
 mention3:
-  from_user: sheila
-  text: @local what is stupid?
+  text: @local are you stupid?
+  user:
+    id: 1
+    name: Eric
+    screen_name: eric

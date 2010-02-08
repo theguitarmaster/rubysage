@@ -113,10 +113,11 @@ protected
   end
 
   def process_mentions(client)
-    puts "Processing mentions (incoming messages)" if @options.verbose
+    max_id = get_users_max_tweet_id(client)
+    puts "Processing mentions (incoming messages since #{max_id})" if @options.verbose
     # For each mention see if any plugins can respond to it.
     # This nested loop is as ugly as hell and could be done better!
-    client.mentions.each do |tweet|
+    client.mentions(:since_id => max_id).each do |tweet|
       Responder.registered_responders.each do |pattern, responder|
         regexp = Regexp.new(pattern, Regexp::IGNORECASE)
         matches = tweet.text.scan(regexp)
@@ -126,6 +127,10 @@ protected
         end
       end
     end
+  end
+  
+  def get_users_max_tweet_id(client)
+    client.user_timeline(:count => 1).first.id
   end
 
 end
@@ -138,8 +143,12 @@ class LocalClient
     puts " ...#{text}"
   end
   
-  def mentions
+  def mentions(parameters = {})
     mash_yaml('config/mentions.yml')
+  end
+  
+  def user_timeline(parameters = {})
+    [ Hashie::Mash.new({:id => 1}) ]
   end
   
 protected

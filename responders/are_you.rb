@@ -5,6 +5,6 @@ Responder.define("are you ([a-zA-Z0-9 ]*)\?") do
   usage   "Are you a xxx?"
   
   def run(tweet, matches)
-    "@#{tweet.from_user} No I'm not #{matches.first}!"
+    "@#{tweet.user.screen_name} No I'm not #{matches.first}!"
   end
 end
