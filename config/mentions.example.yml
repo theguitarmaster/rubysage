@@ -22,3 +22,11 @@ mention3:
     id: 1
     name: Eric
     screen_name: eric
+
+mention4:
+  text: @local tell me a joke
+  user:
+    id: 1
+    name: Eric
+    screen_name: eric
+        
