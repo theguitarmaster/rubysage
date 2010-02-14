@@ -72,8 +72,10 @@ class Sage
   def run
     if parsed_options?
       client = create_client
-      process_actions(client)
+      # Must do mentions first as otherwise code to get last tweet ID will
+      # be confused by the tweets gnerated by actions.
       process_mentions(client) unless @options.ignoring
+      process_actions(client)
     end
   end
   
@@ -86,7 +88,7 @@ protected
   
   def load_actions
     puts "Loading actions from ./actions directory" if @options.verbose
-    Dir["actions/*.rb"].each{ |x| load x; puts x }
+    Dir["actions/*.rb"].each{ |x| load x }
   end
   
   def parsed_options?
