@@ -1,18 +1,3 @@
-module PluginSugar
-  def def_field(*names)
-    class_eval do 
-      names.each do |name|
-        define_method(name) do |*args| 
-          case args.size
-          when 0: instance_variable_get("@#{name}")
-          else    instance_variable_set("@#{name}", *args)
-          end
-        end
-      end
-    end
-  end
-end
-
 class Responder
   @registered_responders = {}
   
@@ -26,7 +11,4 @@ class Responder
     p.instance_eval(&block)
     Responder.registered_responders[pattern] = p
   end
-
-  extend PluginSugar
-  def_field :name, :details, :version, :usage
 end

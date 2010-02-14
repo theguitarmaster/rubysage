@@ -39,6 +39,7 @@
 #   -v, --version       Display the version, then exit
 #   -V, --verbose       Verbose output
 #   -t, --test          Run in test mode making no remote connections
+#   -i, --ignore        Ignore mentions - i.e. don't respond
 
 require 'rubygems'
 require 'yaml'
@@ -48,9 +49,10 @@ require 'optparse'
 require 'rdoc/usage'
 require 'ostruct'
 require 'lib/responder.rb'
+require 'lib/action.rb'
 
 class Sage
-  VERSION = '0.0.2'
+  VERSION = '0.0.3'
   
   attr_reader :options
   
@@ -59,24 +61,32 @@ class Sage
     
     # Set defaults
     @options = OpenStruct.new
-    @options.verbose = false
-    @options.testing = false
+    @options.verbose  = false
+    @options.testing  = false
+    @options.ignoring = false
     
-    load_responders  
+    load_responders
+    load_actions
   end
   
   def run
     if parsed_options?
       client = create_client
-      process_mentions(client)
+      process_actions(client)
+      process_mentions(client) unless @options.ignoring
     end
   end
   
 protected
   
   def load_responders
-    puts "Lodaing responders from ./responders directory" if @options.verbose
+    puts "Loading responders from ./responders directory" if @options.verbose
     Dir["responders/*.rb"].each{ |x| load x }
+  end
+  
+  def load_actions
+    puts "Loading actions from ./actions directory" if @options.verbose
+    Dir["actions/*.rb"].each{ |x| load x; puts x }
   end
   
   def parsed_options?
@@ -86,6 +96,7 @@ protected
     opts.on('-h', '--help')       { output_help }
     opts.on('-V', '--verbose')    { @options.verbose = true }  
     opts.on('-t', '--test')       { @options.testing = true }
+    opts.on('-i', '--ignore')     { @options.ignoring = true }
 
     opts.parse!(@arguments) rescue return false
     true      
@@ -112,6 +123,13 @@ protected
     end
   end
 
+  def process_actions(client)
+    puts "Processing actions" if @options.verbose
+    Action.registered_actions.each do |name, action|
+      client.update(action.run) if feel_like_it?
+    end
+  end
+
   def process_mentions(client)
     max_id = get_users_max_tweet_id(client)
     puts "Processing mentions (incoming messages since #{max_id})" if @options.verbose
@@ -121,7 +139,7 @@ protected
       Responder.registered_responders.each do |pattern, responder|
         regexp = Regexp.new(pattern, Regexp::IGNORECASE)
         matches = tweet.text.scan(regexp)
-        puts " #{responder.name} ==> #{tweet.text} ==> #{matches.inspect}" if @options.verbose
+        puts " #{pattern} ==> #{tweet.text} ==> #{matches.inspect}" if @options.verbose
         unless matches.empty?
           client.update responder.run(tweet, matches)
         end
@@ -131,6 +149,10 @@ protected
   
   def get_users_max_tweet_id(client)
     client.user_timeline(:count => 1).first.id
+  end
+  
+  def feel_like_it?
+    rand < 0.5
   end
 
 end
