@@ -1,4 +1,4 @@
-Responder.define("(tell|give|show) me (a |an )([a-zA-Z0-9]* )?([a-zA-Z0-9 ]*)") do
+Responder.define("(sing|grant|tell|give|show) me (a |an )([a-zA-Z0-9]* )?([a-zA-Z0-9 ]*)") do
   def run(tweet, matches)
 
     matches.flatten! # not sure why having to do this - appears to be nested array
