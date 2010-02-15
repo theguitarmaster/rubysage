@@ -11,13 +11,13 @@ Responder.define("(sing|grant|tell|give|show) me (a |an )([a-zA-Z0-9]* )?([a-zA-
     potentials = Twitter::Search.new(search_terms.join(' ').to_s)
     candidates = []
     if potentials.nil?
-      "I've got no inspiration at the moment. Try again later."
+      "@#{tweet.user.screen_name} I've got no inspiration at the moment."
     else
       # Strip out ones that mention someone so as not to annoy anyone
       potentials.each { |p| candidates << p unless p.include?('@') }
       # pick one at random to actually use
       if candidates.empty?
-        "Sorry, I can't think of anything right now."
+        "@#{tweet.user.screen_name} Sorry, I can't think of anything right now."
       else
         winner = candidates.sort_by{rand}.first
         # Reply with the message - hoping that it's relevant and funny!
