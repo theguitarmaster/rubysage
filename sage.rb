@@ -128,7 +128,10 @@ protected
   def process_actions(client)
     puts "Processing actions" if @options.verbose
     Action.registered_actions.each do |name, action|
-      client.update(action.run) if feel_like_it?
+      if feel_like_it?
+        message = action.run
+        client.update(action.run) if message
+      end
     end
   end
 
@@ -143,7 +146,10 @@ protected
         matches = tweet.text.scan(regexp)
         puts " #{pattern} ==> #{tweet.text} ==> #{matches.inspect}" if @options.verbose
         unless matches.empty?
-          client.update responder.run(tweet, matches), {:in_reply_to_status_id => tweet.id}
+          response = responder.run(tweet, matches)
+          if response
+            client.update(response, {:in_reply_to_status_id => tweet.id})
+          end
         end
       end
     end
