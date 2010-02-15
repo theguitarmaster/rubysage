@@ -3,19 +3,32 @@ Action.define("mood") do
     moods = [
       'angry',
       'sleepy',
-      'horny',
       'sad',
       'happy',
       'excited',
-      'very ill',
+      'ill',
       'ecstatic',
       'lonely',
       'blue',
       'drunk',
-      'naked',
-      'sober'
+      'sober',
+      'squiffy'
     ]
-    mood = moods.sort_by{rand}.first
-    "I'm currently #{mood}"
+    
+    qualifiers = [
+      'very',
+      'a little',
+      'a bit',
+      'somewhat',
+      'totally',
+      'rather',
+      'abnormally',
+      'strangely',
+      'completely',
+    ]
+    
+    mood      = moods.sort_by{rand}.first
+    qualifier = qualifiers.sort_by{rand}.first
+    "I'm feeling #{qualifier} #{mood}"
   end
 end
