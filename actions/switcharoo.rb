@@ -9,7 +9,16 @@ Action.define("switcharoo") do
     }
     word    = swaps.keys.to_a.sort_by{rand}.first
     replace = swaps[word]
-    tweet = Twitter::Search.new(word).sort_by{rand}.first
-    tweet.text.sub Regexp.new(word, Regexp::IGNORECASE), replace
+    potentials = Twitter::Search.new(word)
+    candidates = []
+    response = false
+    unless potentials.nil?
+      potentials.each { |p| candidates << p unless p.include?('@') }
+      unless candidates.empty?
+        winner = candidates.sort_by{rand}.first
+        response = winner.text.sub(Regexp.new(word, Regexp::IGNORECASE), replace)
+      end
+    end
+    response
   end
 end
