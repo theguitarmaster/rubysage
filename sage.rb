@@ -143,7 +143,7 @@ protected
         matches = tweet.text.scan(regexp)
         puts " #{pattern} ==> #{tweet.text} ==> #{matches.inspect}" if @options.verbose
         unless matches.empty?
-          client.update responder.run(tweet, matches)
+          client.update responder.run(tweet, matches), {:in_reply_to_status_id => tweet.id}
         end
       end
     end
@@ -163,8 +163,8 @@ class LocalClient
   def initialize
   end
   
-  def update(text)
-    puts " ...#{text}"
+  def update(text, options = {})
+    puts " ...#{text} (#{options.inspect})"
   end
   
   def mentions(parameters = {})
