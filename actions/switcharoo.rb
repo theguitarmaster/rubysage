@@ -1,8 +1,8 @@
 Action.define("switcharoo") do
   def run
     swaps = {
-      'guitar' => 'wang',
-      'head' => 'weener',
+      'car' => 'wang',
+      'arm' => 'weener',
       'pocket' => 'bottom',
       'dried' => 'tickled',
       'walk' => 'prance'

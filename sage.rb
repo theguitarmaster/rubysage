@@ -83,12 +83,20 @@ protected
   
   def load_responders
     puts "Loading responders from ./responders directory" if @options.verbose
-    Dir["responders/*.rb"].each{ |x| load x }
+#    Dir["responders/*.rb"].each{ |x| load x }
+    infile = File.new("config/responders.yml", "r")
+    enabled = infile.readlines
+    enabled.each{ |x| Dir["responders/, x"].each{ |y| load y } }
+    infile.close
   end
   
   def load_actions
     puts "Loading actions from ./actions directory" if @options.verbose
-    Dir["actions/*.rb"].each{ |x| load x }
+#    Dir["actions/*.rb"].each{ |x| load x }
+    infile = File.new("config/actions.yml", "r")
+    enabled = infile.readlines
+    enabled.each{ |x| Dir["actions/, x"].each{ |y| load y } }
+    infile.close
   end
   
   def parsed_options?
